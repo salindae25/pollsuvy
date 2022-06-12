@@ -11,18 +11,18 @@ datasource db {
 }
 
 model Poll {
-  id           String         @id @default(cuid())
-  createdAt    DateTime       @default(now())
-  expireAt     DateTime
-  title        String
-  description  String?
-  published    Boolean        @default(false)
-  author       User           @relation(fields: [authorId], references: [id])
-  authorId     Int
-  PollQuestion PollQuestion[]
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  expireAt    DateTime
+  title       String
+  description String?
+  published   Boolean  @default(false)
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    Int
+  options     Option[]
 }
 
-model PollQuestion {
+model Option {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   label     String
