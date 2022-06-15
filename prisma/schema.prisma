@@ -32,9 +32,16 @@ model Option {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  password String
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  password String?
   name     String?
   polls    Poll[]
+  Session  Session[]
+}
+
+model Session {
+  token  String @id
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int
 }

@@ -8,8 +8,8 @@ const PollVotePageContent: React.FC<{ id: string }> = ({ id }) => {
   ]);
   if (isLoading || !data) return <div>Loading...</div>;
   return (
-    <div>
-      <div>{data?.title}</div>
+    <div className="flex flex-col w-full gap-4 ">
+      <h3 className="text-2xl font-semibold tracking-[1px]">{data.title}</h3>
       <div className="flex flex-col">
         {data?.options?.map((option) => {
           return <span>{option.label}</span>;
@@ -21,15 +21,11 @@ const PollVotePageContent: React.FC<{ id: string }> = ({ id }) => {
 
 const PollVotePage: React.FC = () => {
   const { query } = useRouter();
-  const { id } = query;
-  if (!id || typeof id != "string") {
+  const id = query.id as string;
+  if (!id) {
     return <div>No Id</div>;
   }
-  return (
-    <>
-      <PollVotePageContent id={id || ""} />
-    </>
-  );
+  return <PollVotePageContent id={id} />;
 };
 
 export default PollVotePage;
