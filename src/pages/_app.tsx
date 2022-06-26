@@ -27,9 +27,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
             </MainLayout>
           </AuthProvider>
         ) : (
-          <BaseLayout>
-            <Component {...pageProps} />
-          </BaseLayout>
+          <AuthProvider>
+            <BaseLayout>
+              <Component {...pageProps} />
+            </BaseLayout>
+          </AuthProvider>
         )}
       </main>
     </>
