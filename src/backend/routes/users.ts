@@ -8,7 +8,7 @@ export const userRoute = createRouter().query('auth', {
         return user || null
     }
 })
-    .query("get-by-id", {
+    .query("get-by-email", {
         input: z.object({
             email: z.string()
         }),

@@ -17,18 +17,28 @@ model Poll {
   title       String
   description String?
   published   Boolean  @default(false)
-  author      User     @relation(fields: [authorId], references: [id])
-  authorId    Int
+  author      User?    @relation(fields: [authorId], references: [id])
+  authorId    Int?
   options     Option[]
+  Vote        Vote[]
 }
 
 model Option {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   label     String
-  vote      Int
+  votes     Vote[]
   poll      Poll     @relation(fields: [pollId], references: [id])
   pollId    String
+}
+
+model Vote {
+  id       Int    @id @default(autoincrement())
+  option   Option @relation(fields: [optionId], references: [id])
+  poll     Poll   @relation(fields: [pollId], references: [id])
+  pollId   String
+  optionId Int
+  voter    String
 }
 
 model User {

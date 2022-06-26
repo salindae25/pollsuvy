@@ -6,8 +6,12 @@ import { AppRouter } from "../backend/routes";
 import superjson from "superjson";
 import Head from "next/head";
 import MainLayout from "@/component/MainLayout";
+import { AuthProvider, unProtectedRoutes } from "@/component/AuthContext";
+import { useRouter } from "next/router";
+import BaseLayout from "@/component/BaseLayout";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
+  const { route } = useRouter();
   return (
     <>
       <Head>
@@ -16,9 +20,17 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex flex-col w-screen min-h-screen bg-white">
-        <MainLayout>
-          <Component {...pageProps} />
-        </MainLayout>
+        {!unProtectedRoutes.includes(route) ? (
+          <AuthProvider>
+            <MainLayout>
+              <Component {...pageProps} />
+            </MainLayout>
+          </AuthProvider>
+        ) : (
+          <BaseLayout>
+            <Component {...pageProps} />
+          </BaseLayout>
+        )}
       </main>
     </>
   );

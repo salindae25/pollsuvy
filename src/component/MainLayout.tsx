@@ -30,7 +30,6 @@ const MainLayout = ({ children }: { children: any }) => {
   };
   const openLoginModal = () => {
     setOpenLoginForm(true);
-    console.log("open login modal");
   };
   //   if (isLoading || !user) {
   //     return <div>Loading</div>;

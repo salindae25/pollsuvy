@@ -1,53 +1,7 @@
 import type { NextPage } from "next";
-import Head from "next/head";
 import Link from "next/link";
-import { KeyboardEventHandler, useCallback, useRef, useState } from "react";
 import { trpc } from "../utils/trpc";
 
-const AuthNav: React.FC = () => {
-  const utils = trpc.useContext();
-  const userCreate = trpc.useMutation(["user.create"], {
-    onSuccess: () => {
-      utils.invalidateQueries(["polls.get-all"]);
-      utils.invalidateQueries(["user.auth"]);
-    },
-  });
-  const inputRef = useRef<HTMLInputElement>(null);
-  return (
-    <>
-      <form
-        className="flex flex-col w-full"
-        onSubmit={(evt) => {
-          evt.preventDefault();
-          userCreate.mutate({
-            email: evt.target?.email.value,
-            name: evt.target?.name.value,
-          });
-        }}
-      >
-        <div className="flex w-full">
-          <input
-            ref={inputRef}
-            type="email"
-            name="email"
-            className="w-56 px-2"
-            placeholder="Type your email"
-          />
-          <input
-            ref={inputRef}
-            type="text"
-            name="name"
-            className="w-56 px-2"
-            placeholder="Type your name"
-          />
-          <button className="px-2 py-1 rounded-md border" type="submit">
-            Submit
-          </button>
-        </div>
-      </form>
-    </>
-  );
-};
 const Home: NextPage = () => {
   const { data, isLoading, error } = trpc.useQuery(["polls.get-all"]);
 

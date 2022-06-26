@@ -19,7 +19,6 @@ interface IFormInput {
 const options = [1, 2].map((val, index) => ({
   name: `option.${index}`,
   value: "",
-  id: `option${index}`,
 }));
 const CreateNewPoll = ({ onSuccess }: { onSuccess: (id: string) => void }) => {
   const utils = trpc.useContext();
@@ -41,12 +40,14 @@ const CreateNewPoll = ({ onSuccess }: { onSuccess: (id: string) => void }) => {
     },
   });
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    const { title, description } = data;
-    console.log(data);
+    const { title, description, options } = data;
 
-    // pollMutation.mutate({ title, description });
+    pollMutation.mutate({
+      title,
+      description,
+      options: options?.map((i) => ({ value: i.value })) || [],
+    });
   };
-  console.log({ fields });
 
   return (
     <form
@@ -73,26 +74,26 @@ const CreateNewPoll = ({ onSuccess }: { onSuccess: (id: string) => void }) => {
       </div>
       <div className="flex flex-col w-full gap-1">
         <label>Options</label>
-        {fields.map((field, index) => (
-          <div key={field.name} className="flex gap-2">
-            <input
-              type="text"
-              className="w-full h-11 px-2 border border-gray-200 rounded-md"
-              {...register(`options.${index}`)}
-              name={field.name}
-              value={field.value}
-              id={`options.${index}`}
-              defaultValue={field.value}
-            />
+        {fields.map((field, index) => {
+          return (
+            <div key={field.name} className="flex gap-2">
+              <input
+                type="text"
+                key={field.id}
+                className="w-full h-11 px-2 border border-gray-200 rounded-md"
+                {...register(`options.${index}.value`)}
+                defaultValue={field.value}
+              />
 
-            <button
-              className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-              onClick={() => remove(index)}
-            >
-              Remove
-            </button>
-          </div>
-        ))}
+              <button
+                className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                onClick={() => remove(index)}
+              >
+                Remove
+              </button>
+            </div>
+          );
+        })}
       </div>
       <div className="flex justify-end mt-auto ml-auto  ">
         <button
